@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -66,5 +67,28 @@ Route::get('/staff/photo/read',[\App\Http\Controllers\StaffController::class,'in
 Route::get('/staff/photo',[\App\Http\Controllers\StaffController::class,'store']);
 Route::get('/staff/photo/update',[\App\Http\Controllers\StaffController::class,'update']);
 Route::get('/staff/photo/delete',[\App\Http\Controllers\StaffController::class,'delete']);
+
+
+//accessor and mutators
+Route::get('/getrole',function(){
+    $role = Role::find(4);
+    return $role->name;
+    
+});
+
+Route::get('/setrole',function(){
+    $role =new Role;
+    $role->name = 'subscriber';
+    $role->save();
+});
+
+//query scope
+Route::get('/query/scope',function(){
+    $roles = Role::latest()->get();
+    // dd($roles);
+    foreach($roles as $role){
+        echo $role->name."<br>";
+    }
+});
 
 

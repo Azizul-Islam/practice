@@ -16,4 +16,20 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
+    }
+
+    //query scope
+   public static function scopeLatest($query)
+   {
+       return $query->orderBy('id','desc');
+   }
 }
