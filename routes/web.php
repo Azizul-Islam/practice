@@ -3,6 +3,7 @@
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +22,50 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('/user')->name('user.')->group(function(){
+   Route::middleware(['guest:web','PreventBackHistory'])->group(function(){
+       Route::view('/login', 'auth.login')->name('login');
+       Route::view('/register', 'auth.register')->name('register');
+       Route::post('/create',[UserController::class,'create'])->name('create');
+       Route::post('/login',[UserController::class,'login'])->name('login');
+   });
+
+   //all authenticate route
+   Route::middleware(['auth:web','PreventBackHistory'])->group(function(){
+       Route::view('/home','home')->name('home');
+       Route::post('/logout',[UserController::class,'logout'])->name('logout');
+   });
+});
+
+//admin route
+Route::prefix('/admin')->name('admin.')->group(function(){
+    Route::middleware(['guest:admin'])->group(function () {
+        Route::view('/login','admin.auth.login')->name('login');
+        Route::post('/login',[App\Http\Controllers\Admin\AdminController::class,'login'])->name('login');
+    });
+
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::view('/dashboard','home')->name('home');
+    });
+});
+
+Route::prefix('/doctor')->name('doctor.')->group(function(){
+    Route::middleware(['guest:doctor'])->group(function () {
+        Route::view('/login','doctor.auth.login')->name('login');
+        Route::post('/login',[App\Http\Controllers\Doctor\DoctorController::class,'login'])->name('login');
+    });
+
+    Route::middleware(['auth:doctor'])->group(function () {
+        Route::view('/dashboard','home')->name('home');
+        Route::post('/logout',[App\Http\Controllers\Doctor\DoctorController::class,'logout'])->name('logout');
+    });
+});
 
 //one to one relationship
 Route::get('/address/insert',[App\Http\Controllers\AddressController::class,'store']);

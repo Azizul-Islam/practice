@@ -8,10 +8,10 @@
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header bg-danger">{{ __('Doctor') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('user.login') }}">
+                    <form method="POST" action="{{ route('doctor.login') }}">
                         @csrf
 
                         <div class="form-group row">

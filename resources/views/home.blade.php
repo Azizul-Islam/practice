@@ -14,7 +14,30 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                                <td>{{ auth()->user()->full_name }}</td>
+                               
+                               
+                                <td>{{ auth()->user()->email }}</td>
+                                <td><a href="" onclick="event.preventDefault();document.getElementById('logoutForm').submit();">Logout</a></td>
+                                
+                                {{-- <form action="{{ route('user.logout') }}" method="POST" id="logoutForm">@csrf</form> --}}
+                                
+                                <form action="{{ route('doctor.logout') }}" method="POST" id="logoutForm">@csrf</form>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
